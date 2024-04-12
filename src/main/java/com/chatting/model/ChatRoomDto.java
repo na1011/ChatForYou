@@ -1,5 +1,6 @@
 package com.chatting.model;
 
+import com.chatting.service.ChatService;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.web.socket.WebSocketSession;
