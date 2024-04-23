@@ -29,6 +29,8 @@ dependencies {
 
     // TEMPLATE
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	//implementation 'org.springframework.boot:spring-boot-starter-freemarker'
+    
 
     // webjars.npm
     implementation 'org.webjars.npm:vue:3.3.11'
