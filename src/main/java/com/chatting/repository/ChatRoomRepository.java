@@ -1,9 +1,9 @@
 package com.chatting.repository;
 
 import com.chatting.model.ChatRoomDto;
-import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Repository;
 
+import javax.annotation.PostConstruct;
 import java.util.*;
 
 @Repository
