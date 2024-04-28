@@ -3,6 +3,8 @@ package com.chatting.model;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @Getter
@@ -10,12 +12,16 @@ import java.util.UUID;
 public class ChatRoomDto {
 
     private String roomId;
-    private String name;
+    private String roomName;
+    private long userCount;
 
-    public static ChatRoomDto create(String name) {
+    private Map<String, String> userMap = new HashMap<>();
+
+    public static ChatRoomDto create(String roomName) {
         ChatRoomDto chatRoomDto = new ChatRoomDto();
         chatRoomDto.roomId = UUID.randomUUID().toString();
-        chatRoomDto.name = name;
+        chatRoomDto.roomName = roomName;
+
         return chatRoomDto;
     }
 }

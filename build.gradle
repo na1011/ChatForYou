@@ -25,20 +25,14 @@ dependencies {
     // SPRING
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
 
     // TEMPLATE
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
-    implementation 'org.thymeleaf.extras:thymeleaf-extras-java8time:3.0.4.RELEASE'
 
-    // json > java
+    // sockjs, stomp, gson
+    implementation 'org.webjars:sockjs-client:1.5.1'
+    implementation 'org.webjars:stomp-websocket:2.3.4'
     implementation 'com.google.code.gson:gson:2.10.1'
-
-    // DB
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'com.querydsl:querydsl-jpa'
-    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 
     // LOMBOK
     compileOnly 'org.projectlombok:lombok'
@@ -48,7 +42,6 @@ dependencies {
 
     // TEST
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.security:spring-security-test'
 
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
