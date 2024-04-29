@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Controller
@@ -30,7 +30,7 @@ public class ChatController {
 
     /**
      * MessageMapping을 통해 WebSocket으로 들어오는 메시지를 발신 처리한다.
-     * 클라이언트에서는 /pub/chat/message 로 요청, 처리가 완료되면 /sub/chat/room/roomId 로 메시지가 전송
+     * 클라이언트에서는 /pub/chat/message 로 요청, 처리가 완료되면 /sub/chat/room/roomId 로 메시지 전송
      */
     @MessageMapping("/enterUser")
     public void enterUser(@Payload ChatDto chat, SimpMessageHeaderAccessor headerAccessor) {
@@ -39,25 +39,23 @@ public class ChatController {
         chatRepository.plusUserCnt(chat.getRoomId());
 
         // 채팅방에 유저 추가 및 UserUUID 반환
-        String userUUID = chatRepository.addUser(chat.getRoomId(), chat.getSender());
+        String userId = chatRepository.addUser(chat.getRoomId(), chat.getSender());
 
-        // 반환 결과를 socket session 에 userUUID 로 저장
-        headerAccessor.getSessionAttributes().put("userId", userUUID);
+        // 반환 결과를 socket session 에 userId 로 저장
+        headerAccessor.getSessionAttributes().put("userId", userId);
         headerAccessor.getSessionAttributes().put("roomId", chat.getRoomId());
 
         chat.setMessage(chat.getSender() + " 님 입장!!");
 
-        // 도착지점으로 들어온 객체를 Message객체로 변환한 후, 도착지점을 sub하고 있는 모든 클라이언트에게 메세지 전달
+        // 도착지점으로 온 객체를 Message 객체로 변환한 후, 도착지점을 sub하고 있는 모든 클라이언트에게 메세지 전달
         messagingTemplate.convertAndSend("/sub/chat/room/" + chat.getRoomId(), chat);
     }
 
     // 해당 유저
-    @MessageMapping("/chat/sendMessage")
+    @MessageMapping("/send")
     public void sendMessage(@Payload ChatDto chat) {
-        log.info("CHAT {}", chat);
         chat.setMessage(chat.getMessage());
         messagingTemplate.convertAndSend("/sub/chat/room/" + chat.getRoomId(), chat);
-
     }
 
     // 유저 퇴장 시에는 EventListener 을 통해서 유저 퇴장을 확인
@@ -68,7 +66,7 @@ public class ChatController {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
 
         // stomp 세션에 있던 uuid 와 roomId 를 확인해서 채팅방 유저 리스트와 room 에서 해당 유저를 삭제
-        String userUUID = (String) headerAccessor.getSessionAttributes().get("userUUID");
+        String userId = (String) headerAccessor.getSessionAttributes().get("userId");
         String roomId = (String) headerAccessor.getSessionAttributes().get("roomId");
 
         log.info("headAccessor {}", headerAccessor);
@@ -77,17 +75,16 @@ public class ChatController {
         chatRepository.minusUserCnt(roomId);
 
         // 채팅방 유저 리스트에서 UUID 유저 닉네임 조회 및 리스트에서 유저 삭제
-        String username = chatRepository.getUserName(roomId, userUUID);
-        chatRepository.delUser(roomId, userUUID);
+        String userName = chatRepository.getUserName(roomId, userId);
+        chatRepository.delUser(roomId, userId);
 
-        if (username != null) {
-            log.info("User Disconnected : " + username);
+        if (userName != null) {
+            log.info("User Disconnected : " + userName);
 
-            // builder 어노테이션 활용
             ChatDto chat = ChatDto.builder()
                     .type(ChatDto.MessageType.LEAVE)
-                    .sender(username)
-                    .message(username + " 님 퇴장!!")
+                    .sender(userName)
+                    .message(userName + " 님 퇴장!!")
                     .build();
 
             messagingTemplate.convertAndSend("/sub/chat/room/" + roomId, chat);
@@ -95,20 +92,19 @@ public class ChatController {
     }
 
     // 채팅에 참여한 유저 리스트 반환
-    @GetMapping("/chat/userlist")
+    @GetMapping("/userlist")
     @ResponseBody
-    public ArrayList<String> userList(String roomId) {
-
+    public List<String> userList(String roomId) {
         return chatRepository.getUserList(roomId);
     }
 
     // 채팅에 참여한 유저 닉네임 중복 확인
-    @GetMapping("/chat/duplicateName")
+    @GetMapping("/duplicateName")
     @ResponseBody
     public String isDuplicateName(@RequestParam("roomId") String roomId, @RequestParam("username") String username) {
 
         // 유저 이름 확인
-        String userName = chatRepository.isDuplicateName(roomId, username);
+        String userName = chatRepository.isDuplicatedName(roomId, username);
         log.info("동작확인 {}", userName);
 
         return userName;

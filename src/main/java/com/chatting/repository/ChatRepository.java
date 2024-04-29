@@ -44,6 +44,12 @@ public class ChatRepository {
         return userList;
     }
 
+    // 채팅방 유저 조회
+    public String getUserName(String roomId, String userId) {
+        ChatRoomDto room = chatRoomMap.get(roomId);
+        return room.getUserMap().get(userId);
+    }
+
     // 채팅방 유저 목록에 유저 추가
     public String addUser(String roomId, String userName) {
         ChatRoomDto room = chatRoomMap.get(roomId);
@@ -55,7 +61,7 @@ public class ChatRepository {
     }
 
     // 유저 이름 중복 시, 뒤에 랜덤한 숫자를 붙인 후 반환
-    private String isDuplicatedName(String roomId, String userName) {
+    public String isDuplicatedName(String roomId, String userName) {
         ChatRoomDto room = chatRoomMap.get(roomId);
 
         if (room.getUserMap().containsValue(userName)) {

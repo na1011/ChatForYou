@@ -21,24 +21,28 @@ public class ChatRoomController {
     private final ChatRepository chatRepository;
 
     // 채팅 리스트 화면
-    @GetMapping
-    public String viewChatList(Model model){
-        model.addAttribute("chatRoomList", chatRepository.findAllRoom());
+    @GetMapping()
+    public String viewRoomList(Model model){
+        model.addAttribute("roomList", chatRepository.findAllRoom());
+        log.info("SHOW ALL ChatList {}", chatRepository.findAllRoom());
+
         return "roomList";
     }
 
-    // 채팅방 생성 후 리스트 화면으로 리다이렉트
-    @PostMapping("/createroom")
+    // 채팅방 생성
+    @PostMapping("/room/create")
     public String createRoom(@RequestParam String roomName, RedirectAttributes rttr) {
         ChatRoomDto room = chatRepository.createChatRoom(roomName);
+        log.info("CREATE Chat Room {}", room);
         rttr.addFlashAttribute("roomName", room);
-        return "redirect:/chat";
+        return "redirect:/";
     }
 
     // 채팅방 입장 화면
     @GetMapping("/room")
-    public String roomDetail(Model model, String roomId){
-        model.addAttribute("chatRoom", chatRepository.findRoomById(roomId));
-        return "chatRoom";
+    public String viewRoomDetail(@RequestParam String roomId ,Model model){
+        // roomId 로 해당하는 채팅방을 찾은 후
+        model.addAttribute("room", chatRepository.findRoomById(roomId));
+        return "roomDetail";
     }
 }
