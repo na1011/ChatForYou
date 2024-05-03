@@ -13,7 +13,11 @@ public class ChatRoomDto {
 
     private String roomId;
     private String roomName;
-    private long userCount;
+    private int userCount;
+    private int maxUserCnt;
+
+    private String roomPwd;
+    private boolean secretChk;
 
     private Map<String, String> userMap = new HashMap<>();
 

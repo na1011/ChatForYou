@@ -29,8 +29,10 @@ public class ChatController {
     private final ChatRepository chatRepository;
 
     /**
-     * MessageMapping을 통해 WebSocket으로 들어오는 메시지를 발신 처리한다.
-     * 클라이언트에서는 /pub/chat/message 로 요청, 처리가 완료되면 /sub/chat/room/roomId 로 메시지 전송
+     * MessageMapping 을 통해 WebSocket 으로 들어오는 메시지를 발신 처리한다.
+     * 클라이언트에서는 /pub/chat/message 로 요청,
+     * 처리가 완료되면 /sub/chat/room/roomId 로 메시지 전송,
+     * 해당 url 을 sub(구독)하고 있는 모든 클라이언트에게 메시지 전달
      */
     @MessageMapping("/enterUser")
     public void enterUser(@Payload ChatDto chat, SimpMessageHeaderAccessor headerAccessor) {
@@ -52,7 +54,7 @@ public class ChatController {
     }
 
     // 해당 유저
-    @MessageMapping("/send")
+    @MessageMapping("/sendMessage")
     public void sendMessage(@Payload ChatDto chat) {
         chat.setMessage(chat.getMessage());
         messagingTemplate.convertAndSend("/sub/chat/room/" + chat.getRoomId(), chat);
@@ -99,14 +101,9 @@ public class ChatController {
     }
 
     // 채팅에 참여한 유저 닉네임 중복 확인
-    @GetMapping("/duplicateName")
+    @GetMapping("/username/check")
     @ResponseBody
-    public String isDuplicateName(@RequestParam("roomId") String roomId, @RequestParam("username") String username) {
-
-        // 유저 이름 확인
-        String userName = chatRepository.isDuplicatedName(roomId, username);
-        log.info("동작확인 {}", userName);
-
-        return userName;
+    public String isDuplicatedName(@RequestParam("roomId") String roomId, @RequestParam("userName") String userName) {
+        return chatRepository.isDuplicatedName(roomId, userName);
     }
 }

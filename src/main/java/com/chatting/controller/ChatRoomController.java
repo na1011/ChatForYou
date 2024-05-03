@@ -24,7 +24,7 @@ public class ChatRoomController {
     @GetMapping()
     public String viewRoomList(Model model){
         model.addAttribute("roomList", chatRepository.findAllRoom());
-        log.info("SHOW ALL ChatList {}", chatRepository.findAllRoom());
+        log.info("개설된 채팅방 갯수 = {}", chatRepository.findAllRoom().size());
 
         return "roomList";
     }
@@ -33,16 +33,17 @@ public class ChatRoomController {
     @PostMapping("/room/create")
     public String createRoom(@RequestParam String roomName, RedirectAttributes rttr) {
         ChatRoomDto room = chatRepository.createChatRoom(roomName);
-        log.info("CREATE Chat Room {}", room);
+        log.info("CREATE Chat Room = {}", room);
         rttr.addFlashAttribute("roomName", room);
-        return "redirect:/";
+        return "redirect:/chat";
     }
 
     // 채팅방 입장 화면
     @GetMapping("/room")
     public String viewRoomDetail(@RequestParam String roomId ,Model model){
-        // roomId 로 해당하는 채팅방을 찾은 후
         model.addAttribute("room", chatRepository.findRoomById(roomId));
+        log.info("roomId 로 입장 = {}", roomId);
+
         return "roomDetail";
     }
 }

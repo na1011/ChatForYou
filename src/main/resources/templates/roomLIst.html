@@ -242,7 +242,7 @@
             </tr>
             <th:block th:fragment="content">
 
-                <tr th:each="room : ${list}">
+                <tr th:each="room : ${roomList}">
                     <span class="hidden" th:id="${room.roomName}"></span>
                     <td th:if="${room.secretChk}">
                         <a href="#enterRoomModal" data-bs-toggle="modal" data-target="#enterRoomModal" th:data-id="${room.roomId}">[[${room.roomName}]]</a>
