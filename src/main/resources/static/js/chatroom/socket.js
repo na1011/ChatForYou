@@ -61,7 +61,7 @@ function onConnected() {
     stompClient.send("/pub/chat/enterUser",
         {},
         JSON.stringify({
-            "roomId": roomId,
+            roomId: roomId,
             sender: userName,
             type: 'ENTER'
         })
@@ -82,7 +82,7 @@ function isDuplicateName() {
             "roomId": roomId
         },
         success: function (data) {
-            console.log("함수 동작 확인 : " + data);
+            console.log("유저 아이디 중복체크 : " + data);
 
             userName = data;
         }

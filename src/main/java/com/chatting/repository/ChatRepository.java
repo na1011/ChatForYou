@@ -1,11 +1,13 @@
 package com.chatting.repository;
 
 import com.chatting.model.ChatRoomDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
 
+@Slf4j
 @Repository
 public class ChatRepository {
 
@@ -64,7 +66,7 @@ public class ChatRepository {
     public String isDuplicatedName(String roomId, String userName) {
         ChatRoomDto room = chatRoomMap.get(roomId);
 
-        if (room.getUserMap().containsValue(userName)) {
+        if (!room.getUserMap().isEmpty() && room.getUserMap().containsValue(userName)) {
             int randomNum = (int) ((Math.random() * 100) + 1);
             userName = userName + randomNum;
         }

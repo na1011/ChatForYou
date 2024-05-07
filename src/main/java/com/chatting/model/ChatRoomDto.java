@@ -1,14 +1,18 @@
 package com.chatting.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-@Getter
-@Setter
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ChatRoomDto {
 
     private String roomId;
@@ -19,13 +23,13 @@ public class ChatRoomDto {
     private String roomPwd;
     private boolean secretChk;
 
-    private Map<String, String> userMap = new HashMap<>();
+    private Map<String, String> userMap;
 
     public static ChatRoomDto create(String roomName) {
-        ChatRoomDto chatRoomDto = new ChatRoomDto();
-        chatRoomDto.roomId = UUID.randomUUID().toString();
-        chatRoomDto.roomName = roomName;
-
-        return chatRoomDto;
+        return ChatRoomDto.builder()
+                .roomId(UUID.randomUUID().toString())
+                .roomName(roomName)
+                .userMap(new HashMap<>())
+                .build();
     }
 }
