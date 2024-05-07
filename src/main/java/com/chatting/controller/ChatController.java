@@ -12,7 +12,6 @@ import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
@@ -21,7 +20,6 @@ import java.util.List;
 
 @Slf4j
 @Controller
-@RequestMapping("/chat")
 @RequiredArgsConstructor
 public class ChatController {
 
@@ -34,8 +32,10 @@ public class ChatController {
      * 처리가 완료되면 /sub/chat/room/roomId 로 메시지 전송,
      * 해당 url 을 sub(구독)하고 있는 모든 클라이언트에게 메시지 전달
      */
-    @MessageMapping("/enterUser")
+    @MessageMapping("/chat/enterUser")
     public void enterUser(@Payload ChatDto chat, SimpMessageHeaderAccessor headerAccessor) {
+
+        log.info("enterUser 요청 받음");
 
         // 채팅방 유저+1
         chatRepository.plusUserCnt(chat.getRoomId());
@@ -50,14 +50,16 @@ public class ChatController {
         chat.setMessage(chat.getSender() + " 님 입장!!");
 
         // 도착지점으로 온 객체를 Message 객체로 변환한 후, 도착지점을 sub하고 있는 모든 클라이언트에게 메세지 전달
-        messagingTemplate.convertAndSend("/sub/chat/room/" + chat.getRoomId(), chat);
+        messagingTemplate.convertAndSend("/sub/chat/room?roomId=" + chat.getRoomId(), chat);
     }
 
     // 해당 유저
-    @MessageMapping("/sendMessage")
+    @MessageMapping("/chat/sendMessage")
     public void sendMessage(@Payload ChatDto chat) {
+        log.info("메세지 발행 요청 = {}", chat.getMessage());
+
         chat.setMessage(chat.getMessage());
-        messagingTemplate.convertAndSend("/sub/chat/room/" + chat.getRoomId(), chat);
+        messagingTemplate.convertAndSend("/sub/chat/room?roomId=" + chat.getRoomId(), chat);
     }
 
     // 유저 퇴장 시에는 EventListener 을 통해서 유저 퇴장을 확인
@@ -94,16 +96,18 @@ public class ChatController {
     }
 
     // 채팅에 참여한 유저 리스트 반환
-    @GetMapping("/userlist")
+    @GetMapping("/chat/userlist")
     @ResponseBody
     public List<String> userList(String roomId) {
+        log.info("유저리스트 확인 요청");
         return chatRepository.getUserList(roomId);
     }
 
     // 채팅에 참여한 유저 닉네임 중복 확인
-    @GetMapping("/username/check")
+    @GetMapping("/chat/username/check")
     @ResponseBody
     public String isDuplicatedName(@RequestParam("roomId") String roomId, @RequestParam("userName") String userName) {
+        log.info("유저이름 중복체크");
         return chatRepository.isDuplicatedName(roomId, userName);
     }
 }

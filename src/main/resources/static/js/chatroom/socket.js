@@ -53,7 +53,7 @@ function onConnected() {
 
     // sub 할 url => /sub/chat/room/roomId 로 구독한다
     console.log("roomId 구독 : " + roomId);
-    stompClient.subscribe('/sub/chat/room/' + roomId, onMessageReceived);
+    stompClient.subscribe('/sub/chat/room?roomId=' + roomId, onMessageReceived);
 
     // 서버에 userName 을 가진 유저가 들어왔다는 것을 알림
     // /pub/chat/enterUser 로 메시지를 보냄
@@ -94,6 +94,7 @@ function isDuplicateName() {
 // ajax 로 유저 리스를 받으며 클라이언트가 입장/퇴장 했다는 문구가 나왔을 때마다 실행된다.
 function getUserList() {
     const $list = $("#list");
+    console.log('유저 리스트 받기' + $list);
 
     $.ajax({
         type: "GET",
@@ -129,6 +130,7 @@ function sendMessage(event) {
             message: messageInput.value,
             type: 'TALK'
         };
+        console.log("메세지 발행 : " + JSON.stringify(chatMessage));
 
         stompClient.send("/pub/chat/sendMessage", {}, JSON.stringify(chatMessage));
         messageInput.value = '';
@@ -139,7 +141,7 @@ function sendMessage(event) {
 // 메시지를 받을 때도 마찬가지로 JSON 타입으로 받으며,
 // 넘어온 JSON 형식의 메시지를 parse 해서 사용한다.
 function onMessageReceived(payload) {
-    //console.log("payload 들어오냐? :"+payload);
+    console.log("payload 들어오냐? :"+payload);
     var chat = JSON.parse(payload.body);
 
     var messageElement = document.createElement('li');
