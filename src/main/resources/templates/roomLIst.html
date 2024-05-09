@@ -12,9 +12,10 @@
           href="https://use.fontawesome.com/releases/v5.1.0/css/all.css"
           integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt"
           crossorigin="anonymous">
-    <script src="/js/roomlist/bootstrap-show-password.min.js"></script>
-    <script th:inline="javascript">
 
+    <script src="/js/roomlist/bootstrap-show-password.min.js"></script>
+
+    <script th:inline="javascript">
         let roomId;
 
         $(function(){
@@ -96,7 +97,7 @@
         // 채팅방 생성
         function createRoom() {
 
-            let name = $("#roomName").val();
+            let roomName = $("#roomName").val();
             let pwd = $("#roomPwd").val();
             let secret = $("#secret").is(':checked');
             let secretChk = $("#secretChk");
@@ -105,11 +106,11 @@
             // console.log("name : " + name);
             // console.log("pwd : " + pwd);
 
-            if (name === "") {
+            if (roomName === "") {
                 alert("방 이름은 필수입니다")
                 return false;
             }
-            if ($("#" + name).length > 0) {
+            if ($("#" + roomName).length > 0) {
                 alert("이미 존재하는 방입니다")
                 return false;
             }
@@ -149,9 +150,9 @@
                     // console.log("확인 : "+chkRoomUserCnt(roomId))
 
                     if(result){
-                        if (chkRoomUserCnt(roomId)) {
-                            location.href = "/chat/room?roomId="+roomId;
-                        }
+                        // if (chkRoomUserCnt(roomId)) {
+                        // }
+                        location.href = "/chat/room?roomId="+roomId;
                     }else{
                         alert("비밀번호가 틀립니다. \n 비밀번호를 확인해주세요")
                     }
@@ -224,7 +225,7 @@
 
         <div th:if="${user == null}" class="row">
             <div class="col">
-                <a href="/chatlogin"><button type="button" class="btn btn-primary">로그인하기</button></a>
+                <a href="/chat/login"><button type="button" class="btn btn-primary">로그인하기</button></a>
             </div>
         </div>
         <h5 th:if="${user != null}">

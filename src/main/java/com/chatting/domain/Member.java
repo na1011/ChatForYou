@@ -10,14 +10,15 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
 
-    private String memberId;
-    private String memberName;
-    private String memberEmail;
-
     // OAuth2 공급자
     private String provider;
-    private String providerId;
+    private String memberId;
+
+    private String memberName;
+    private String memberEmail;
+    private String memberNickName;
+
+    private String memberRole;
 
     private LocalDateTime joinDate;
-
 }

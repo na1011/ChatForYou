@@ -1,9 +1,11 @@
 package com.chatting.controller;
 
+import com.chatting.config.provider.CustomMemberDetails;
 import com.chatting.model.ChatRoomDto;
 import com.chatting.repository.ChatRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,9 +21,12 @@ public class ChatRoomController {
 
     // 채팅 리스트 화면
     @GetMapping()
-    public String viewRoomList(Model model){
+    public String viewRoomList(Model model, @AuthenticationPrincipal CustomMemberDetails memberDetails){
         model.addAttribute("roomList", chatRepository.findAllRoom());
-        log.info("개설된 채팅방 갯수 = {}", chatRepository.findAllRoom().size());
+
+        if (memberDetails != null) {
+            model.addAttribute("user", memberDetails.getMember());
+        }
 
         return "roomList";
     }

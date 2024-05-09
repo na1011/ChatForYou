@@ -39,6 +39,14 @@ dependencies {
     implementation 'org.webjars:stomp-websocket:2.3.4'
     implementation 'com.google.code.gson:gson:2.10.1'
 
+    // log4j
+    implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16'
+
+    // DB
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.mariadb.jdbc:mariadb-java-client:3.1.4'
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2'
+
     // LOMBOK
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
