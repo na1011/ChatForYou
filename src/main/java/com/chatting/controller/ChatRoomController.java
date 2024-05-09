@@ -28,13 +28,10 @@ public class ChatRoomController {
 
     // 채팅방 생성
     @PostMapping("/room/create")
-    public String createRoom(@RequestParam("roomName") String roomName,
-                             @RequestParam("roomPwd") String roomPwd,
-                             @RequestParam("secretChk") String secretChk,
-                             @RequestParam(value = "maxUserCnt", defaultValue = "100") int maxUserCnt,
+    public String createRoom(@ModelAttribute("room") ChatRoomDto params,
                              RedirectAttributes rttr) {
 
-        ChatRoomDto room = chatRepository.createChatRoom(roomName, roomPwd, Boolean.parseBoolean(secretChk), maxUserCnt);
+        ChatRoomDto room = chatRepository.createChatRoom(params);
         log.info("CREATE Chat Room = {}", room);
         rttr.addFlashAttribute("roomName", room);
         return "redirect:/chat";

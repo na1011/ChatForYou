@@ -3,7 +3,6 @@ package com.chatting.model;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.Map;
 
@@ -21,4 +20,6 @@ public class ChatRoomDto {
     private boolean secretChk;
 
     private Map<String, String> userMap;
+
+
 }

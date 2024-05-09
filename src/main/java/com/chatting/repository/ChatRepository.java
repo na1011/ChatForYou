@@ -30,13 +30,14 @@ public class ChatRepository {
     }
 
     // 채팅방 생성 후 LinkedHashMap에 UUID, chatRoom 객체 저장
-    public ChatRoomDto createChatRoom(String roomName, String roomPwd, boolean secretChk, int maxUserCnt) {
+    public ChatRoomDto createChatRoom(ChatRoomDto params) {
         ChatRoomDto chatRoom = ChatRoomDto.builder()
                 .roomId(UUID.randomUUID().toString())
-                .roomName(roomName)
-                .roomPwd(roomPwd)
-                .secretChk(secretChk)
-                .maxUserCnt(maxUserCnt)
+                .roomName(params.getRoomName())
+                .roomPwd(params.getRoomPwd())
+                .secretChk(params.isSecretChk())
+                .userCount(0)
+                .maxUserCnt(params.getMaxUserCnt())
                 .userMap(new HashMap<>())
                 .build();
 
