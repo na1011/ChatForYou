@@ -79,6 +79,27 @@ public class ChatRepository {
         room.getUserMap().remove(userId);
     }
 
+    // maxUserCnt 에 따른 채팅방 입장 여부
+    public boolean checkUserCnt(String roomId){
+        ChatRoomDto room = chatRoomMap.get(roomId);
+        log.info("참여인원 확인 [{}, {}]", room.getUserCount(), room.getMaxUserCount());
+
+        if (room.getUserCount() + 1 > room.getMaxUserCount()) {
+            return false;
+        }
+        return true;
+    }
+
+    // 채팅방 비밀번호 조회
+    public boolean confirmPwd(String roomId, String roomPwd) {
+        return roomPwd.equals(chatRoomMap.get(roomId).getRoomPwd());
+    }
+
+    // 채팅방 삭제
+    public void delChatRoom(String roomId) {
+        chatRoomMap.remove(roomId);
+    }
+
     // 채팅방 인원 증가
     public void plusUserCnt(String roomId) {
         ChatRoomDto room = chatRoomMap.get(roomId);

@@ -49,7 +49,7 @@ public class ChatController {
 
         chat.setMessage(chat.getSender() + " 님 입장!!");
 
-        // 도착지점으로 온 객체를 Message 객체로 변환한 후, 도착지점을 sub하고 있는 모든 클라이언트에게 메세지 전달
+        // 도착지점으로 온 객체를 Message 객체로 변환 후, 도착지점을 sub 하고 있는 모든 클라이언트에게 메세지 전달
         messagingTemplate.convertAndSend("/sub/chat/room?roomId=" + chat.getRoomId(), chat);
     }
 

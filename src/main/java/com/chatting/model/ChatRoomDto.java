@@ -18,10 +18,10 @@ public class ChatRoomDto {
     private String roomId;
     private String roomName;
     private int userCount;
-    private int maxUserCnt;
+    private int maxUserCount;
 
     private String roomPwd;
-    private boolean secretChk;
+    private boolean secretRoom;
 
     private Map<String, String> userMap;
 

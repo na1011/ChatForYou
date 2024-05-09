@@ -13,6 +13,7 @@ var messageForm = document.querySelector('#messageForm');
 var messageInput = document.querySelector('#message');
 var messageArea = document.querySelector('#messageArea');
 var connectingElement = document.querySelector('.connecting');
+var userList = document.querySelector('#userList');
 
 var stompClient = null;
 var userName = null;
