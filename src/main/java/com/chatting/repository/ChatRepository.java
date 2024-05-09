@@ -30,8 +30,16 @@ public class ChatRepository {
     }
 
     // 채팅방 생성 후 LinkedHashMap에 UUID, chatRoom 객체 저장
-    public ChatRoomDto createChatRoom(String roomName) {
-        ChatRoomDto chatRoom = ChatRoomDto.create(roomName);
+    public ChatRoomDto createChatRoom(String roomName, String roomPwd, boolean secretChk, int maxUserCnt) {
+        ChatRoomDto chatRoom = ChatRoomDto.builder()
+                .roomId(UUID.randomUUID().toString())
+                .roomName(roomName)
+                .roomPwd(roomPwd)
+                .secretChk(secretChk)
+                .maxUserCnt(maxUserCnt)
+                .userMap(new HashMap<>())
+                .build();
+
         chatRoomMap.put(chatRoom.getRoomId(), chatRoom);
         return chatRoom;
     }
@@ -82,9 +90,9 @@ public class ChatRepository {
     // maxUserCnt 에 따른 채팅방 입장 여부
     public boolean checkUserCnt(String roomId){
         ChatRoomDto room = chatRoomMap.get(roomId);
-        log.info("참여인원 확인 [{}, {}]", room.getUserCount(), room.getMaxUserCount());
+        log.info("참여인원 확인 [{}, {}]", room.getUserCount(), room.getMaxUserCnt());
 
-        if (room.getUserCount() + 1 > room.getMaxUserCount()) {
+        if (room.getUserCount() + 1 > room.getMaxUserCnt()) {
             return false;
         }
         return true;
