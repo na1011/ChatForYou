@@ -14,7 +14,7 @@
 |소셜 로그인|방 생성 페이지|목록 페이지|
 |:---:|:---:|:---:|
 |<img width="300" height="400" alt="스크린샷 2023-05-25 오후 9 45 45" src="https://github.com/na1011/ChatForYou/assets/144922969/470af7ef-4ccc-492e-bb93-430fcb358798">|<img width="300" height="400" alt="스크린샷 2023-05-25 오후 9 52 31" src="https://github.com/na1011/ChatForYou/assets/144922969/efaea4af-858d-495f-a061-cfca14a371b7">|<img width="300" height="400" alt="스크린샷 2023-05-25 오후 9 47 24" src="https://github.com/na1011/ChatForYou/assets/144922969/1f3d7d9c-4794-4205-a653-42af2c4ce8ac">|
-|방 설정 수정|채팅 화면|입장 제한|
+|방 설정 수정|채팅 화면|비밀번호 오류/인원 초과 시 입장제한|
 |<img width="300" height="400" alt="스크린샷 2023-05-25 오후 9 47 31" src="https://github.com/na1011/ChatForYou/assets/144922969/54277b52-7e0d-4bb4-811f-ee3dfd86bea0">|<img width="300" height="400" alt="스크린샷 2023-05-25 오후 9 47 48" src="https://github.com/na1011/ChatForYou/assets/144922969/ecf7564d-1286-47cf-a380-42043e7c959d">|<img width="300" height="400" alt="스크린샷 2023-05-25 오후 9 50 05" src="https://github.com/na1011/ChatForYou/assets/144922969/00f733ea-1b26-4b17-b362-d3584c1cde4d">|
 
 # 3. 주요 기능 요약
