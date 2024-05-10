@@ -44,9 +44,13 @@ public class ChatRoomController {
 
     // 채팅방 입장 화면
     @GetMapping("/room")
-    public String viewRoomDetail(@RequestParam String roomId ,Model model){
+    public String viewRoomDetail(@AuthenticationPrincipal CustomMemberDetails memberDetails,
+                                 @RequestParam String roomId,Model model) {
+
         model.addAttribute("room", chatRepository.findRoomById(roomId));
-        log.info("roomId 로 입장 = {}", roomId);
+        if (memberDetails != null) {
+            model.addAttribute("member", memberDetails.getMember());
+        }
 
         return "roomDetail";
     }

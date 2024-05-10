@@ -1,22 +1,24 @@
 'use strict';
 
+// document.write("<script src='jquery-3.6.1.js'></script>")
 document.write("<script\n" +
     "  src=\"https://code.jquery.com/jquery-3.6.1.min.js\"\n" +
     "  integrity=\"sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=\"\n" +
     "  crossorigin=\"anonymous\"></script>")
 
-let userNamePage = document.querySelector('#userName-page');
-let chatPage = document.querySelector('#chat-page');
-let userNameForm = document.querySelector('#userNameForm');
-let messageForm = document.querySelector('#messageForm');
-let messageInput = document.querySelector('#message');
-let messageArea = document.querySelector('#messageArea');
-let connectingElement = document.querySelector('.connecting');
+var userNamePage = document.querySelector('#userName-page');
+var chatPage = document.querySelector('#chat-page');
+var userNameForm = document.querySelector('#userNameForm');
+var messageForm = document.querySelector('#messageForm');
+var messageInput = document.querySelector('#message');
+var messageArea = document.querySelector('#messageArea');
+var connectingElement = document.querySelector('.connecting');
+var userList = document.querySelector('#userList');
 
-let stompClient = null;
-let userName = null;
+var stompClient = null;
+var userName = null;
 
-let colors = [
+var colors = [
     '#2196F3', '#32c787', '#00BCD4', '#ff5652',
     '#ffc107', '#ff85af', '#FF9800', '#39bbb0'
 ];
@@ -37,7 +39,7 @@ function connect(event) {
     chatPage.classList.remove('invisible');
 
     // 연결하고자하는 Socket 의 endPoint
-    let socket = new SockJS('/ws-stomp');
+    var socket = new SockJS('/ws-stomp');
     stompClient = Stomp.over(socket);
 
     stompClient.connect({}, onConnected, onError);
@@ -91,8 +93,8 @@ function isDuplicateName() {
 // 유저 리스트 받기
 // ajax 로 유저 리스를 받으며 클라이언트가 입장/퇴장 했다는 문구가 나왔을 때마다 실행된다.
 function getUserList() {
-
-    const userList = $("#userList");
+    const $list = $("#list");
+    console.log('유저 리스트 받기' + $list);
 
     $.ajax({
         type: "GET",
@@ -101,12 +103,12 @@ function getUserList() {
             "roomId": roomId
         },
         success: function (data) {
-            let users = "";
+            var users = "";
             for (let i = 0; i < data.length; i++) {
+                //console.log("data[i] : "+data[i]);
                 users += "<li class='dropdown-item'>" + data[i] + "</li>"
             }
-            console.log('유저 리스트 받기 : ' + users);
-            userList.html(users);
+            $list.html(users);
         }
     })
 }
@@ -119,10 +121,10 @@ function onError(error) {
 
 // 메시지 전송때는 JSON 형식을 메시지를 전달한다.
 function sendMessage(event) {
-    let messageContent = messageInput.value.trim();
+    var messageContent = messageInput.value.trim();
 
     if (messageContent && stompClient) {
-        let chatMessage = {
+        var chatMessage = {
             "roomId": roomId,
             sender: userName,
             message: messageInput.value,
@@ -140,9 +142,9 @@ function sendMessage(event) {
 // 넘어온 JSON 형식의 메시지를 parse 해서 사용한다.
 function onMessageReceived(payload) {
     console.log("payload 들어오냐? :"+payload);
-    let chat = JSON.parse(payload.body);
+    var chat = JSON.parse(payload.body);
 
-    let messageElement = document.createElement('li');
+    var messageElement = document.createElement('li');
 
     if (chat.type === 'ENTER') {  // chatType 이 enter 라면 아래 내용
         messageElement.classList.add('event-message');
@@ -157,21 +159,21 @@ function onMessageReceived(payload) {
     } else { // chatType 이 talk 라면 아래 내용용
         messageElement.classList.add('chat-message');
 
-        let avatarElement = document.createElement('i');
-        let avatarText = document.createTextNode(chat.sender[0]);
+        var avatarElement = document.createElement('i');
+        var avatarText = document.createTextNode(chat.sender[0]);
         avatarElement.appendChild(avatarText);
         avatarElement.style['background-color'] = getAvatarColor(chat.sender);
 
         messageElement.appendChild(avatarElement);
 
-        let userNameElement = document.createElement('span');
-        let userNameText = document.createTextNode(chat.sender);
+        var userNameElement = document.createElement('span');
+        var userNameText = document.createTextNode(chat.sender);
         userNameElement.appendChild(userNameText);
         messageElement.appendChild(userNameElement);
     }
 
-    let textElement = document.createElement('p');
-    let messageText = document.createTextNode(chat.message);
+    var textElement = document.createElement('p');
+    var messageText = document.createTextNode(chat.message);
     textElement.appendChild(messageText);
 
     messageElement.appendChild(textElement);
@@ -182,12 +184,12 @@ function onMessageReceived(payload) {
 
 
 function getAvatarColor(messageSender) {
-    let hash = 0;
-    for (let i = 0; i < messageSender.length; i++) {
+    var hash = 0;
+    for (var i = 0; i < messageSender.length; i++) {
         hash = 31 * hash + messageSender.charCodeAt(i);
     }
 
-    let index = Math.abs(hash % colors.length);
+    var index = Math.abs(hash % colors.length);
     return colors[index];
 }
 

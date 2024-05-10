@@ -1,5 +1,7 @@
-<!doctype html>
-<html lang="ko">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="ko">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,7 +14,7 @@
             integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="/css/chatroom/main.css"/>
 
-    <title>My Spring WebSocket Chatting</title>
+    <title>Chat For You</title>
 </head>
 <body>
 <noscript>
@@ -21,10 +23,13 @@
 
 <div id="userName-page">
     <div class="username-page-container">
-        <h1 class="title">Type your username</h1>
+        <h1 class="title">채팅에 참여할 이름을 입력하세요.</h1>
         <form id="userNameForm" name="userNameForm">
-            <div class="form-group">
-                <input type="text" id="name" placeholder="Username" autocomplete="off" class="form-control"/>
+            <div class="form-group" sec:authorize="isAnonymous()">
+                <input type="text" id="name" class="form-control" placeholder="Username" autocomplete="off"/>
+            </div>
+            <div class="form-group" sec:authorize="isAuthenticated()">
+                <input type="text" id="name" class="form-control" th:value="${member.getMemberNickName()}" autocomplete="off" readonly/>
             </div>
             <div class="form-group">
                 <button type="submit" class="accent username-submit">Start Chatting</button>
@@ -35,15 +40,15 @@
 
 
 <div id="chat-page" class="invisible">
-    <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
+    <div class="btn-group dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
             참가한 유저
         </button>
-        <div id="userList" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <ul id="userList" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 
-        </div>
+        </ul>
     </div>
+
     <div class="chat-container">
         <div class="chat-header">
             <h2>[[${room.roomName}]]</h2>
