@@ -1,9 +1,11 @@
 package com.chatting.service;
 
+import com.chatting.config.oauth.GoogleUserInfo;
 import com.chatting.config.oauth.NaverUserInfo;
 import com.chatting.config.oauth.OAuth2UserInfo;
 import com.chatting.config.provider.CustomMemberDetails;
 import com.chatting.domain.Member;
+import com.chatting.domain.Role;
 import com.chatting.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -28,6 +30,10 @@ public class PrincipalOAuth2Service extends DefaultOAuth2UserService {
 
         OAuth2UserInfo oAuth2UserInfo;
         switch (provider) {
+            case "google":
+                oAuth2UserInfo = new GoogleUserInfo(oAuth2User.getAttributes());
+                break;
+
             case "naver":
                 oAuth2UserInfo = new NaverUserInfo((Map) oAuth2User.getAttributes().get("response"));
                 break;
@@ -44,6 +50,7 @@ public class PrincipalOAuth2Service extends DefaultOAuth2UserService {
                     .memberEmail(oAuth2UserInfo.getEmail())
                     .memberName(oAuth2UserInfo.getName())
                     .memberNickName(oAuth2UserInfo.getMemberNickName())
+                    .memberRole(Role.USER.getAuth())
                     .build();
             memberRepository.save(member);
         }

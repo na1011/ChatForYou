@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
 
+    private long memberSeq;
+
     // OAuth2 공급자
     private String provider;
     private String memberId;
