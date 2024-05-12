@@ -139,7 +139,7 @@ function sendMessage(event) {
 // 메시지를 받을 때도 마찬가지로 JSON 타입으로 받으며,
 // 넘어온 JSON 형식의 메시지를 parse 해서 사용한다.
 function onMessageReceived(payload) {
-    console.log("payload 들어오냐? :"+payload);
+
     let chat = JSON.parse(payload.body);
 
     let messageElement = document.createElement('li');
