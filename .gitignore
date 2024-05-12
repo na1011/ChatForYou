@@ -3,6 +3,7 @@
 
 ### DB info ###
 application-local.properties
+application-dev.properties
 
 ### Eclipse ###
 .metadata
